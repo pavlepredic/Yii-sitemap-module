@@ -18,7 +18,7 @@
  *		),
  * 	);
  * 
- * If you don't specify any optinal parameters, module will generate a sitemap 
+ * If you don't specify any optional parameters, module will generate a sitemap 
  * using all actions that have default values for their arguments (or have no arguments).
  * You may exclude entire controllers (by adding them to 'protectedControllers')
  * and specific actions (by adding them to 'protectedActions').
