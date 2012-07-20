@@ -13,6 +13,8 @@
  *			'priority' => '0.5', 						//optional
  *			'changefreq' => 'daily', 					//optional
  *			'lastmod' => '1985-11-05', 					//optional
+ *			'cacheId' => 'cache',						//optional
+ *			'cachingDuration' => 3600,					//optional
  *		),
  * 	);
  * 
@@ -88,8 +90,13 @@
  * 	'sitemap.xml' 	=> 'sitemap/default/index',
  *	'sitemap.html' 	=> 'sitemap/default/index/format/html',
  *
+ * Caching:
+ * By default, this module will cache sitemap data for an hour.
+ * You can disable caching by setting 'cachingDuration' to 0.
+ * You may also increase or decrease cache validity.
+ * 
  * @author Pavle Predic
- * @version 0.1
+ * @version 0.2
  */
 class SitemapModule extends CWebModule
 {
@@ -128,6 +135,26 @@ class SitemapModule extends CWebModule
 	 * @var array
 	 */
 	public $priority, $changefreq, $lastmod;
+	
+	/**
+	 * ID of the caching component
+	 * (defaults to 'cache')
+	 * @var string
+	 */
+	public $cacheId = 'cache';
+	
+	/**
+	 * Number of seconds cached data will remain valid.
+	 * Set to 0 to disable caching
+	 * @var int
+	 */
+	public $cachingDuration = 3600;
+	
+	/**
+	 * CCache instance
+	 * @var CCache
+	 */
+	protected $_cache;
 
 	
 	public function init()
@@ -157,6 +184,9 @@ class SitemapModule extends CWebModule
 	 */	
 	public function getSpecifiedUrls()
 	{
+		if ($urls = $this->getCache()->get(__METHOD__))
+			return $urls;
+		
 		$urls = array();
 		
 		foreach ($this->actions as $action)
@@ -209,6 +239,7 @@ class SitemapModule extends CWebModule
 				$this->addUrl($urls, $action, array(), @$config['prefs']);
 		}
 		
+		$this->getCache()->add(__METHOD__, $urls, $this->cachingDuration);
 		return $urls;
 	}
 	
@@ -219,6 +250,9 @@ class SitemapModule extends CWebModule
 	 */
 	public function getAllUrls()
 	{
+		if ($urls = $this->getCache()->get(__METHOD__))
+			return $urls;
+		
 		Yii::import('application.controllers.*');
 		$urls = array();
 		
@@ -250,6 +284,7 @@ class SitemapModule extends CWebModule
 			}
 		}
 		
+		$this->getCache()->add(__METHOD__, $urls, $this->cachingDuration);
 		return $urls;
 	}
 	
@@ -321,5 +356,26 @@ class SitemapModule extends CWebModule
 		$prefs = array_merge($defPrefs, $prefs);
 		
 		$urls[$url] = $prefs;
+	}
+	
+	/**
+	 * Returns a CCache instance.
+	 * This will either be the cache component specified
+	 * in self::$cacheId or an instance of CDummyCache
+	 * if no caching is required
+	 * @return CCache
+	 */
+	protected function getCache()
+	{
+		if (!$this->_cache)
+		{
+			if ($this->cachingDuration and $this->cacheId)
+				$this->_cache = Yii::app()->getComponent($this->cacheId);
+
+			if (!($this->_cache instanceof CCache))
+				$this->_cache = new CDummyCache();
+		}
+		
+		return $this->_cache;
 	}
 }
