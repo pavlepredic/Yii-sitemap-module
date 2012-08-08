@@ -38,29 +38,16 @@ action route (eg 'site/index') and MAY contain further configuration:
 		it contains one or more of the following keys: 'lastmod', 'changefreq' and 'priority';
 		any preference that is not specified here will take on a default value,
 		as specified in $lastmod, $changefreq and $priority, or - if these are unspecified -
-		it will fallback to the following values: 
-```
+		it will fallback to the following values:
+
+
+```php 
 'changefreq' => 'always', 'lastmod' => date('Y-m-d'), 'priority' => 0.5
 ```
-- 'params' - used for supplying action parameters; this may be done in one of two ways:
-		a) by using an array, eg:
-```
-'array' => array(
-	array('postId' => 1, 'postName' => 'Welcome'), //here we specified postId and postName parameters
-	array('postId' => 2, 'postName' => 'FAQ'),
-),
-```
-		b) by specifying a model class, eg:
-```
-'model' => array(
-	'class' => 'Post',
-	'criteria' => array('condition' => 'published > NOW() - INTERVAL 5 DAY'), //optional
-	'map' => array( //map parameter names to model attributes
-		'postId' => 'id', //value for parameter 'postId' is fetched from 'id' attribute of Post model 
-		'postName' => 'name', //value for parameter 'postName' is fetched from 'name' attribute of Post model
-	),
-),
-```
+
+- 'params' - used for supplying action parameters; this may be done in one of two ways (see example below):
+	1. by using an array
+	2. by specifying a model class
 
 Specifying parameters by using a model will result in creating an URL for each model instance stored in DB.
 You may provide search criteria to use only specific models. Criteria should be provided as an array
