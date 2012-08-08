@@ -39,12 +39,12 @@ action route (eg 'site/index') and MAY contain further configuration:
 		any preference that is not specified here will take on a default value,
 		as specified in $lastmod, $changefreq and $priority, or - if these are unspecified -
 		it will fallback to the following values: 
-```php
+```
 'changefreq' => 'always', 'lastmod' => date('Y-m-d'), 'priority' => 0.5
 ```
 - 'params' - used for supplying action parameters; this may be done in one of two ways:
 		a) by using an array, eg:
-```php
+```
 'array' => array(
 	array('postId' => 1, 'postName' => 'Welcome'), //here we specified postId and postName parameters
 	array('postId' => 2, 'postName' => 'FAQ'),
