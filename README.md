@@ -1,11 +1,11 @@
-#ABOUT:
+#About:
 
 This is a module for Yii framework (http://www.yiiframework.com/). The purpose of this module is
 to generate a sitemap (in xml or html format) for your Yii web application. It is entirely self-contained
 and requires very little configuration. By default, it will create a sitemap using all your controller actions.
 This may be fine-tuned by specifying module attributes, as described below.
 
-#HOW TO USE:
+#How to use:
 To enable this module, add the following lines to app config:
 ```php
 'modules'=>array(
@@ -51,7 +51,7 @@ action route (eg 'site/index') and MAY contain further configuration:
 ),
 ```
 		b) by specifying a model class, eg:
-```php
+```
 'model' => array(
 	'class' => 'Post',
 	'criteria' => array('condition' => 'published > NOW() - INTERVAL 5 DAY'), //optional
