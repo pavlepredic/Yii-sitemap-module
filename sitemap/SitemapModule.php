@@ -238,7 +238,7 @@ class SitemapModule extends CWebModule
 					$criteria = @$config['params']['model']['criteria'];
 		
 					//fetch all model instances
-					foreach ($class::model()->findAll($criteria) as $model)
+					foreach (CActiveRecord::model($class)->findAll($criteria) as $model)
 					{
 						$args = array();
 						//build arguments from model attributes
