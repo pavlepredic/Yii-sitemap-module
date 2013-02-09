@@ -213,7 +213,26 @@ class SitemapModule extends CWebModule
 				if (isset($config['params']['model']) and isset($config['params']['model']['class']))
 				{
 					$class = $config['params']['model']['class'];
-			
+					/*
+					* If we use model from any module, we set in config property 'modelAlias'
+					* and import model class
+					* For example:
+					* array(
+				        *     'route' => '/blog/post',
+				        *     'params' => array(
+				        *       'model' => array(
+				        *         'modelAlias' => 'application.modules.blog.models.Blog',
+				        *         'class' => 'Blog',
+				        *         'criteria' => array('condition' => 'published > NOW() - INTERVAL 5 DAY'),
+				        *         'map' => array(
+				        *           'postId' => 'id',
+				        *           'postName' => 'name',
+				        *         ),
+				        *       ),
+				        *     ),
+				        *   ),
+					*/
+					if (isset($config['params']['model']['modelAlias'])) YiiBase::import($config['params']['model']['modelAlias']);
 					if (!class_exists($class))
 						throw new CHttpException(500, "Class $class not found");
 					$criteria = @$config['params']['model']['criteria'];
