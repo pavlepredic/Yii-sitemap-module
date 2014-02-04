@@ -3,7 +3,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <?php foreach ($urls as $url => $data) : ?>
 <url>
-	<loc><?php echo $url ?></loc>
+	<loc><?php echo htmlspecialchars($url) ?></loc>
 <?php if (isset($data['lastmod'])) : ?>
 	<lastmod><?php echo $data['lastmod'] ?></lastmod>
 <?php endif; ?>
